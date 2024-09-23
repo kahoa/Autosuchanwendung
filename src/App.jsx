@@ -1,32 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Search from './components/Search.jsx';
+import corolla from './components/corolla.jpg';
 
 function App() {
-    const [name, setName] = useState('');
-    const [login, setLogin] = useState(false);
-    const [bgColor, setBgColor] = useState('white');
+    const [results, setResults] = useState([]);
 
-    function handleClick(){
-        setLogin(!login);
-    };
 
-    function changeBackgroundColor(){
-        const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange',];
-        const randomColor = colors[Math.floor(Math.random() * colors.length)];
-        setBgColor(randomColor); 
-    };
 
-    return(
-        <div style={{backgroundColor: bgColor}} >
-            <input type='text'
-            placeholder='Enter your name'
-            value={name} onChange={(e) => setName(e.target.value)}
-            />
-            <button onClick={handleClick}>{login ? 'Logout' : 'Login'}</button>
-            <p className='Greeting-text'>{login ? `Hallo ${name}, Willkommen` : ''}</p>
+    return( 
+    <div>
+        <h1>Autoliste</h1>
+        <p>Suche nach einem beliebigen Modell.</p>
+        <Search 
+            setResults={setResults}/>
+            <div> 
+                {results.map(result => (
+                    <div style={{margin: "10px"}} key={result.id}>
+                        <strong>ID:</strong> {result.id} <br />
+                        <strong>Model:</strong> {result.model} <br />
+                        <strong>Brand:</strong> {result.make} <br />
+                        <strong>Year:</strong> {result.year} <br />
+                        <strong>Price:</strong> {result.price} <br />
+                        {/* Only Corolla has its own image, use the fake image for everything else */}
+                        <img src={result.model === "Corolla" ? corolla : result.image} alt= "image of {result.model}" style = {{width: "200px" ,marginTop: "30px"}}/>
+                    </div>
+                ))}
+            </div>
 
-            <button onClick={changeBackgroundColor}>Change Background Color</button>
+            <button type="button" class="btn btn-secondary"style = {{margin: "10px"}} 
+            onClick={() => setResults([])}>Clear</button>
         </div>
+        
     );
-};
+}
 
 export default App;
